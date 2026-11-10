@@ -30,7 +30,7 @@ server.get("/", (req, res) => {
 });
 
 server.get("/produtos", (req, res) => {
-   const sql = "SELECT * FROM PRODUTO";
+   const sql = "SELECT * FROM produto";
    bd.query(sql, (err, result) => {
         if(err)
             return res.status(500).send("Erro ao consultar produtos!");
