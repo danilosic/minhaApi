@@ -6,19 +6,23 @@ const server = express();
 server.use(express.json());
 
 const bd = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "MINHA_API"
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    ssl: {
+        ca: process.env.DB_CA?.replace(/\\n/g, "\n")
+    }
 });
 
 bd.connect((err) => {
-    if(err)
-    {
-        console.log("Erro ao conectar no banco de dados");
+    if (err) {
+        console.error("Erro ao conectar ao MySQL:", err.message);
         return;
     }
-    console.log("Conectado ao MySQL!");
+
+    console.log("Conectado ao MySQL do Aiven!");
 });
 
 server.get("/", (req, res) => {
@@ -36,7 +40,7 @@ server.get("/produtos", (req, res) => {
    }); 
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3090;
 
 server.listen(PORT, "0.0.0.0", () => {
     console.log(`API executando na porta ${PORT}`);
